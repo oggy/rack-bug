@@ -31,11 +31,12 @@
           <tr style="display:none">
             <td></td>
             <td colspan="2">
-              <ul>
-                <% query.filtered_backtrace.each do |line| %>
-                  <li><%=h line %></li>
+              <ul class="backtrace">
+                <% query.filtered_backtrace_data.each do |line, filtered| %>
+                  <li<%= filtered ? ' class="filtered"' : '' %>><%=h line %></li>
                 <% end %>
               </ul>
+              <a href="#" class="show_full_backtrace">Show Full Backtrace</a>
             </td>
           </tr>
         <% end %>

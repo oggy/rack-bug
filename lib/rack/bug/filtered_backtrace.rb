@@ -7,14 +7,28 @@ module Rack
       end
 
       def has_backtrace?
-        filtered_backtrace.any?
+        filtered_backtrace_data.any?
       end
 
-      def filtered_backtrace
-        @filtered_backtrace ||= @backtrace.map{|l| l.to_s.strip }.select do |line|
-          root_for_backtrace_filtering.nil? ||
-          (line.index(root_for_backtrace_filtering) == 0) && !(line.index(root_for_backtrace_filtering("vendor")) == 0)
+      def filtered_backtrace_data
+        @filtered_backtrace ||= @backtrace.map{|l| l.to_s.strip }.map do |line|
+          [line, filtered_backtrace_line?(line)]
         end
+      end
+
+      def filtered_backtrace_line?(line)
+        app_path_pattern or
+          return false
+
+        line !~ app_path_pattern || line =~ app_vendor_path_pattern
+      end
+
+      def app_path_pattern
+        @app_path_pattern ||= /\A#{Regexp.escape(root_for_backtrace_filtering)}/
+      end
+
+      def app_vendor_path_pattern
+        @app_vendor_path_pattern ||= /\A#{Regexp.escape(root_for_backtrace_filtering('vendor'))}/
       end
 
       def root_for_backtrace_filtering(sub_path = nil)

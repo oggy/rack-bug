@@ -63,6 +63,7 @@
   position: relative;
   width: auto;
 }
+
 #rack_bug_toolbar li a {
   border-left: 1px solid #487858;
   padding: 8px 9px 9px;
@@ -141,6 +142,14 @@
 
 #rack_bug .panel_content ul ul {
   padding: 0;
+}
+
+#rack_bug .panel_content ul.backtrace {
+  padding-left: 0;
+}
+
+#rack_bug .panel_content li.filtered {
+  display: none;
 }
 
 #rack_bug .panel_content table {
